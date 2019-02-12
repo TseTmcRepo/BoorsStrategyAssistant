@@ -1,0 +1,101 @@
+﻿@model List<TsetmcLib.Trade>
+@{
+    ViewBag.Title = "پیشنهاددهنده سهم";
+}
+@section styles  {
+    <link href="~/Dist/x-editable/css/bootstrap-editable.css" rel="stylesheet" />
+    <link href="~/Dist/DataTable/datatables.min.css" rel="stylesheet" />
+}
+@section scripts {
+    <script src="~/Dist/x-editable/js/bootstrap-editable.js"></script>
+    <script src="~/Dist/DataTable/datatables.min.js"></script>
+    <script>
+        $(function () {
+            $('#market').editable({
+                value: 1,
+                source: [
+                    { value: 0, text: 'مشترک بورس و فرابورس' },
+                    { value: 1, text: 'بورس' },
+                    { value: 2, text: 'فرابورس' },
+                    { value: 3, text: 'آتی' },
+                    { value: 4, text: 'پایه فرابورس' }
+                ]
+            });
+            $('#positiveMaxChange').editable();
+            $('#yesterdayAllowedChange').editable();
+            $('#yesterdayAllowedChange').on('save', function (e, params) {
+                $('#twodaysagoAllowedChange').editable('setValue', params.newValue);
+            });
+            $('#twodaysagoAllowedChange').editable();
+            $('#twodaysagoAllowedChange').on('save', function (e, params) {
+                $('#yesterdayAllowedChange').editable('setValue', params.newValue);
+            });
+            $('#positiveMinChange').editable();
+            $('#doSimpleFilter').on('click', function () {
+                $('#doSimpleFilter').addClass('hidden');
+                $('#simpleFilterResult').addClass('hidden');
+                $('#simpleFilterLoading').removeClass('hidden');
+                $.post({
+                    url: './home/index/',
+                    data: {
+                        Market: $('#market').editable('getValue', true),
+                        yesterdayAllowedChange: $('#yesterdayAllowedChange').editable('getValue', true),
+                        PositiveMinChange: $('#positiveMinChange').editable('getValue', true),
+                        PositiveMaxChange: $('#positiveMaxChange').editable('getValue', true)
+                    },
+                    success: function (data) {
+                        $('#simpleFilterResult').removeClass('hidden');
+                        $('#simpleFilterLoading').addClass('hidden');
+                        $('#doSimpleFilter').removeClass('hidden');
+                        $.each(data, function (index, value) {
+                            $('#datatables>tbody').empty();
+                            $('#datatables>tbody').append('<tr><td>' + value.LVal18AFC + '</td><td>' + value.LVal30 + '</td><td>' + Math.floor(value.DailyChange).toLocaleString('fa').split('٬').join(',')  +'</td></tr>');
+                        });
+                    }
+                });
+              
+            });
+        });
+    </script>
+}
+<div class="row">
+    <div class="col-md-6 col-sm-12 mt-5">
+        <div class="card">
+            <h4 class="card-header bg-warning">
+                فیلتر ساده
+            </h4>
+            <div class="card-body">
+                <h5 class="card-title">فیلتر براساس عملکرد دو روزه</h5>
+                <p class="card-text text-justify">
+                    لیست نمادهای بازار
+                    <a href="#" id="market" data-type="select" data-title="بازارهای بورس:">بورس</a>
+                    که امروز حداکثر
+                    <a href="#" id="positiveMaxChange" data-type="text" data-title="میزان درصد تغییر:">3.1</a>
+                    درصد و حداقل
+                    <a href="#" id="positiveMinChange" data-type="text" data-title="میزان درصد تغییر:">0.1</a>
+                    درصد تغییر قیمت و دیروز حداقل
+                    <a href="#" id="yesterdayAllowedChange" data-type="text" data-title="میزان درصد تغییر:">4.9</a>
+                    درصد رشد قیمت و پریروز حداکثر
+                    <a href="#" id="twodaysagoAllowedChange" data-type="text" data-title="میزان درصد تغییر:">4.9</a>
+                    درصد رشد قیمت داشته اند، را نمایش بده.
+                </p>
+                <a id="doSimpleFilter" href="#" class="card-link float-left">اعمال فیلتر</a>
+            </div>
+            <div class="card-footer p-0">
+                <div id="simpleFilterResult" class="hidden">
+                    <table class="table table-striped table-bordered m-0 " id="datatables">
+                        <thead>
+                            <tr>
+                                <th>نماد</th>
+                                <th>نام</th>
+                                <th>درصد تغییر</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="simpleFilterLoading" class="hidden text-center">تا نمایش نتیجه چند لحظه صبر کنید ...</div>
+            </div>
+        </div>
+    </div>
+</div>

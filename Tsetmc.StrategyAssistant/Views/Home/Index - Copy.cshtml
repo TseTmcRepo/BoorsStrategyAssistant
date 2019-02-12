@@ -1,0 +1,75 @@
+﻿@model List<TsetmcLib.Trade>
+@{
+    ViewBag.Title = "Home Page";
+}
+@section styles  {
+    <link href="~/Content/css/stepper/index.css" rel="stylesheet" />
+}
+@section scripts {
+    <script src="~/Scripts/Stepper/index.js"></script>
+}
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <div class="stepwizard">
+                <div class="stepwizard-row setup-panel">
+                    <div class="stepwizard-step">
+                        <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+                        <p>بازار</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <a href="#step-2" type="button" class="btn btn-default btn-circle disabled" disabled="disabled">2</a>
+                        <p>درصد تغییرات</p>
+                    </div>
+                    <div class="stepwizard-step">
+                        <a href="#step-3" type="button" class="btn btn-default btn-circle disabled" disabled="disabled">3</a>
+                        <p>نتیجه</p>
+                    </div>
+                </div>
+            </div>
+            <form role="form">
+                <div class="row setup-content" id="step-1">
+                    <div class="col-12">
+                            <h3>انتخاب بازار</h3>
+                            <div class="form-group">
+                                <label class="control-label" for="market">بازار:</label>
+                                <select class="form-control" required>
+                                    <option value="1">بورس</option>
+                                    <option value="2">فرابورس</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary nextBtn btn-lg float-left" type="button">بعدی</button>
+                        </div>
+                </div>
+                <div class="row setup-content" id="step-2">
+                    <div class="col-12">
+                        <h3>میزان درصد تغییرات</h3>
+                        <div class="form-group form-inline">
+                            <label class="control-label ml-1">برای امروز حداقل:</label>
+                            <input size="2" maxlength="200" type="text" required="required" class="form-control" placeholder="درصد" />
+                            <label class="control-label ml-1 mr-1">و حداکثر:</label>
+                            <input size="2" maxlength="200" type="text" required="required" class="form-control" placeholder="درصد" />
+                            <label class="control-label ml-1 mr-1">و برای دو روز گذشته:</label>
+                            <input size="2" maxlength="200" type="text" required="required" class="form-control" placeholder="درصد" />
+                            <span class="form-text mr-1">حداقل تغییر برای دیروز و حداکثر تغییر برای پریروز</span>
+                        </div>
+                        <button class="btn btn-primary nextBtn btn-lg float-left" type="button">Next</button>
+                    </div>
+                </div>
+                <div class="row setup-content" id="step-3">
+                    <div class="col-12">
+                            <h3> Step 3</h3>
+                            <ul class="list-group">
+                                @foreach (var t in Model)
+                                {
+                                    <li class="list-group-item"><span class="badge bg-success">@t.LVal18AFC</span> @t.LVal30 <span class="badge bg-danger">@t.DailyChange </span> </li>
+                                }
+                            </ul>
+                            <button class="btn btn-success btn-lg float-left" type="submit">Finish!</button>
+                        </div>
+                    </div>
+            </form>
+
+
+
+        </div>
+    </div>
