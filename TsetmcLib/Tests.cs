@@ -12,7 +12,7 @@ namespace TsetmcLib
         [Theory]
         [InlineData("2019-02-03", 20190203, 20190202, 20190130)]
         [InlineData("2019-02-02", 20190202, 20190130, 20190129)]
-        public void should_get_correct_date_collection(string date, int today, int yesterday, int twodaysago)
+        public void Should_get_correct_date_collection(string date, int today, int yesterday, int twodaysago)
         {
             // Arrange
             var currentDate = Convert.ToDateTime(date);
@@ -27,7 +27,7 @@ namespace TsetmcLib
         }
 
         [Fact]
-        public void should_get_correct_today_date_collection()
+        public void Should_get_correct_today_date_collection()
         {
             // Arrange
 
@@ -39,6 +39,19 @@ namespace TsetmcLib
 
             // Assert
             Assert.Equal(expectedDays, days);
+        }
+
+        [Fact]
+        public void Should_get_active_trade_dates()
+        {
+            // Arrange
+            var expected = 10;
+
+            // Act
+            var activeDates = BaseData.GetActiveTradeDates();
+
+            // Assert
+            Assert.Equal(expected, activeDates.Count);
         }
     }
 }
