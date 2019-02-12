@@ -40,7 +40,7 @@ namespace TsetmcLib
             ServiceReference1.TsePublicV2SoapClient client = new ServiceReference1.TsePublicV2SoapClient();
             var tradesDataset = client.TradeOneDay(username, password, date, market);
 
-            var trades = TradeMapper.Map(tradesDataset.Tables[0]);
+            var trades = TradeMapper.Map<Trade>(tradesDataset.Tables[0]);
             return trades;
         }
 
