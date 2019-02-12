@@ -73,7 +73,7 @@
     <Compile Include="SimpleFilter.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="Trade.cs" />
-    <Compile Include="TradeMapper.cs" />
+    <Compile Include="CollectionMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
