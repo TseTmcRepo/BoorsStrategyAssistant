@@ -312,16 +312,16 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TsetmcLib\TsetmcLib.csproj">
-      <Project>{eec6e101-14f7-43dc-8793-ae1b382dfc35}</Project>
-      <Name>TsetmcLib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TsetmcLib\TsetmcLib.csproj">
+      <Project>{eec6e101-14f7-43dc-8793-ae1b382dfc35}</Project>
+      <Name>TsetmcLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

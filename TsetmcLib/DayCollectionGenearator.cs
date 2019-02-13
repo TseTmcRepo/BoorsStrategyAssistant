@@ -2,7 +2,7 @@
 
 namespace TsetmcLib
 {
-    public class DayCollectionGenearator
+    public class DayCollectionGenearator : IDayCollectionGenearator
     {
         public Days GenerateToday()
         {

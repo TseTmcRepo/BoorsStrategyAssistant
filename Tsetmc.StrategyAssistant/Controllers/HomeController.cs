@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Tsetmc.StrategyAssistant.Models;
 using TsetmcLib;
-using DataTables.AspNet.Core;
 
 namespace Tsetmc.StrategyAssistant.Controllers
 {
@@ -24,7 +19,7 @@ namespace Tsetmc.StrategyAssistant.Controllers
         }
         [HttpPost]
         public ActionResult Index(SimpleFilterModel model)
-        {
+        {          
             var boorsAllowedFilter = new AllowedMarketFilter(model.YesterdayAllowedChange , model.PositiveMinChange, model.PositiveMaxChange, model.Market);
             var BoorsAllowed = filterer.GetAllowed(boorsAllowedFilter);
             return Json(BoorsAllowed, JsonRequestBehavior.AllowGet);

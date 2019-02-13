@@ -71,12 +71,14 @@
     </Compile>
     <Compile Include="DayCollectionGenearator.cs" />
     <Compile Include="Days.cs" />
+    <Compile Include="IDayCollectionGenearator.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleFilter.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="Trade.cs" />
     <Compile Include="CollectionMapper.cs" />
+    <Compile Include="TseDayCollectionGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

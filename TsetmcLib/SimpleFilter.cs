@@ -12,7 +12,7 @@ namespace TsetmcLib
         public List<Trade> GetAllowed(AllowedMarketFilter filter)
         {
 
-            var days = new DayCollectionGenearator().GenerateToday();
+            var days = new TseDayCollectionGenerator().GenerateToday();
             var todayTrades = GetLastDayTrades(username, password, filter.Market).ToList();
             var day0130Trades = GetSpecdayTrades(username, password, days.TwoDaysAgo, filter.Market).ToList();
             var day0202Trades = GetSpecdayTrades(username, password, days.Yesterday, filter.Market).ToList();
