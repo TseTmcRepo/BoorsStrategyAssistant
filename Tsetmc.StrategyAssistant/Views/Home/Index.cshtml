@@ -1,4 +1,5 @@
-﻿@model List<TsetmcLib.Trade>
+﻿@using System.Web.Hosting
+@model List<TsetmcLib.Trade>
 @{
     ViewBag.Title = "پیشنهاددهنده سهم";
 }
@@ -47,55 +48,125 @@
                         $('#simpleFilterResult').removeClass('hidden');
                         $('#simpleFilterLoading').addClass('hidden');
                         $('#doSimpleFilter').removeClass('hidden');
-                        $.each(data, function (index, value) {
-                            $('#datatables>tbody').empty();
+                        $('#datatables>tbody').empty();
+                        $.each(data, function (index, value) {                            
                             $('#datatables>tbody').append('<tr><td>' + value.LVal18AFC + '</td><td>' + value.LVal30 + '</td><td>' + Math.floor(value.DailyChange).toLocaleString('fa').split('٬').join(',')  +'</td></tr>');
                         });
                     }
                 });
               
             });
+
+            $('#todayAllowedChange').editable();
+            $('#lastDaysAllowedChange').editable();
+            $('#pbeMinChange').editable();
+            $('#pbeMaxChange').editable();
+            $('#doFilterByPBE').on('click', function () {
+                $('#doFilterByPBE').addClass('hidden');
+                $('#filterByPBEResult').addClass('hidden');
+                $('#filterByPBELoading').removeClass('hidden');
+                $.post({
+                    url: './home/filterByPBE/',
+                    data: {
+                        Market: $('#market').editable('getValue', true),
+                        TodayAllowedChange: $('#todayAllowedChange').editable('getValue', true),
+                        LastDaysAllowedChange: $('#lastDaysAllowedChange').editable('getValue', true),
+                        PbeMinChange: $('#pbeMinChange').editable('getValue', true),
+                        PbeMaxChange: $('#pbeMaxChange').editable('getValue', true)
+                    },
+                    success: function (data) {
+                        $('#filterByPBEResult').removeClass('hidden');
+                        $('#filterByPBELoading').addClass('hidden');
+                        $('#doFilterByPBE').removeClass('hidden');
+                        $('#datatablespbe>tbody').empty();
+                        $.each(data, function (index, value) {
+                            
+                            $('#datatablespbe>tbody').append('<tr><td>' + value.LVal18AFC + '</td><td>' + value.LVal30 + '</td><td>' + Math.floor(value.DailyChange).toLocaleString('fa').split('٬').join(',') + '</td></tr>');
+                        });
+                    }
+                });
+
+            });
         });
     </script>
 }
-<div class="row">
-    <div class="col-md-6 col-sm-12 mt-5">
-        <div class="card">
-            <h4 class="card-header bg-warning">
-                فیلتر ساده
-            </h4>
-            <div class="card-body">
-                <h5 class="card-title">فیلتر براساس عملکرد دو روزه</h5>
-                <p class="card-text text-justify">
-                    لیست نمادهای بازار
-                    <a href="#" id="market" data-type="select" data-title="بازارهای بورس:">بورس</a>
-                    که امروز حداکثر
-                    <a href="#" id="positiveMaxChange" data-type="text" data-title="میزان درصد تغییر:">3.1</a>
-                    درصد و حداقل
-                    <a href="#" id="positiveMinChange" data-type="text" data-title="میزان درصد تغییر:">0.1</a>
-                    درصد تغییر قیمت و دیروز حداقل
-                    <a href="#" id="yesterdayAllowedChange" data-type="text" data-title="میزان درصد تغییر:">4.9</a>
-                    درصد رشد قیمت و پریروز حداکثر
-                    <a href="#" id="twodaysagoAllowedChange" data-type="text" data-title="میزان درصد تغییر:">4.9</a>
-                    درصد رشد قیمت داشته اند، را نمایش بده.
-                </p>
-                <a id="doSimpleFilter" href="#" class="card-link float-left">اعمال فیلتر</a>
-            </div>
-            <div class="card-footer p-0">
-                <div id="simpleFilterResult" class="hidden">
-                    <table class="table table-striped table-bordered m-0 " id="datatables">
-                        <thead>
-                            <tr>
-                                <th>نماد</th>
-                                <th>نام</th>
-                                <th>درصد تغییر</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+    <div class="row">
+        <div class="col-md-6 col-sm-12 mt-5">
+            <div class="card">
+                <h4 class="card-header bg-warning">
+                    فیلتر ساده
+                </h4>
+                <div class="card-body">
+                    <h5 class="card-title">فیلتر براساس عملکرد دو روزه</h5>
+                    <p class="card-text text-justify">
+                        لیست نمادهای بازار
+                        <a href="#" id="market" data-type="select" data-title="بازارهای بورس:">بورس</a>
+                        که امروز حداکثر
+                        <a href="#" id="positiveMaxChange" data-type="text" data-title="میزان درصد تغییر:">3.1</a>
+                        درصد و حداقل
+                        <a href="#" id="positiveMinChange" data-type="text" data-title="میزان درصد تغییر:">0.1</a>
+                        درصد تغییر قیمت و دیروز حداقل
+                        <a href="#" id="yesterdayAllowedChange" data-type="text" data-title="میزان درصد تغییر:">4.9</a>
+                        درصد رشد قیمت و پریروز حداکثر
+                        <a href="#" id="twodaysagoAllowedChange" data-type="text" data-title="میزان درصد تغییر:">4.9</a>
+                        درصد رشد قیمت داشته اند، را نمایش بده.
+                    </p>
+                    <a id="doSimpleFilter" href="#" class="card-link float-left">اعمال فیلتر</a>
                 </div>
-                <div id="simpleFilterLoading" class="hidden text-center">تا نمایش نتیجه چند لحظه صبر کنید ...</div>
+                <div class="card-footer p-0">
+                    <div id="simpleFilterResult" class="hidden">
+                        <table class="table table-striped table-bordered m-0 " id="datatables">
+                            <thead>
+                                <tr>
+                                    <th>نماد</th>
+                                    <th>نام</th>
+                                    <th>درصد تغییر</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="simpleFilterLoading" class="hidden text-center">تا نمایش نتیجه چند لحظه صبر کنید ...</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12 mt-5">
+            <div class="card">
+                <h4 class="card-header bg-warning">
+                    فیلتر P/E
+                </h4>
+                <div class="card-body">
+                    <h5 class="card-title">فیلتر براساس عملکرد دو روزه و P/E</h5>
+                    <p class="card-text text-justify">
+                        لیست نمادهای بازار
+                        <a href="#" id="market" data-type="select" data-title="بازارهای بورس:">بورس</a>
+                        که امروز حداکثر
+                        <a href="#" id="todayAllowedChange" data-type="text" data-title="میزان درصد تغییر:">0</a>
+                        درصد و دو روز گذشته حداکثر
+                        <a href="#" id="lastDaysAllowedChange" data-type="text" data-title="میزان درصد تغییر:">0</a>
+                        درصد تغییر قیمت داشته اند و شاخص P/E حداقل
+                        <a href="#" id="pbeMinChange" data-type="text" data-title="میزان درصد تغییر:">4.9</a>
+                        و حداکثر
+                        <a href="#" id="pbeMaxChange" data-type="text" data-title="میزان درصد تغییر:">12.9</a>
+                        باشد، را نمایش بده.
+                    </p>
+                    <a id="doFilterByPBE" href="#" class="card-link float-left">اعمال فیلتر</a>
+                </div>
+                <div class="card-footer p-0">
+                    <div id="filterByPBEResult" class="hidden">
+                        <table class="table table-striped table-bordered m-0 " id="datatablespbe">
+                            <thead>
+                                <tr>
+                                    <th>نماد</th>
+                                    <th>نام</th>
+                                    <th>درصد تغییر</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="filterByPBELoading" class="hidden text-center">تا نمایش نتیجه چند لحظه صبر کنید ...</div>
+                </div>
             </div>
         </div>
     </div>
-</div>

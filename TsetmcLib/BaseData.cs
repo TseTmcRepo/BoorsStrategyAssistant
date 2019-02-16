@@ -15,7 +15,7 @@ namespace TsetmcLib
             ServiceReference1.TsePublicV2SoapClient client = new ServiceReference1.TsePublicV2SoapClient();
             var activeDatesDataset = client.NSCStart(username, password);
 
-            var activeDates = CollectionMapper.Map<ActiveDate>(activeDatesDataset.Tables[0]).Distinct().ToList();
+            var activeDates = CollectionMapper.Map<ActiveDate>(activeDatesDataset.Tables[0]).Distinct().OrderByDescending( o => o.DEven).ToList();
             return activeDates;
         }
     }

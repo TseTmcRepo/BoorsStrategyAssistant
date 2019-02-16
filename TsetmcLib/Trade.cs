@@ -8,6 +8,8 @@ namespace TsetmcLib
         public string DEven { get; set; } //   تاريخ
         public decimal ZTotTran { get; set; } //    تعداد معاملات
         public decimal QTotTran5J { get; set; } //    حجم - تعداد سهام معامله شده
+        public decimal PbE { get; set; } //    P/E
+        public decimal EPS { get; set; } //    EPS
         public decimal QTotCap { get; set; } // معاملات
         public string InsCode { get; set; } // نماد
         public string LVal30 { get; set; } // نام
