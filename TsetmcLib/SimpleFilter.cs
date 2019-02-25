@@ -14,16 +14,18 @@ namespace TsetmcLib
 
             var days = new TseDayCollectionGenerator().GenerateToday();
             var todayTrades = GetLastDayTrades(username, password, filter.Market).ToList();
-            var day0130Trades = GetSpecdayTrades(username, password, days.TwoDaysAgo, filter.Market).ToList();
-            var day0202Trades = GetSpecdayTrades(username, password, days.Yesterday, filter.Market).ToList();
+            var twoDaysAgoTrades = GetSpecdayTrades(username, password, days.TwoDaysAgo, filter.Market).ToList();
+            var yesterdayTrades = GetSpecdayTrades(username, password, days.Yesterday, filter.Market).ToList();
+
+            var twoDaysAgoAllowed = twoDaysAgoTrades.Where(t
+                => t.DailyChange < filter.YesterdayAllowedChange).ToList();
+            var yesterdayAllowed = yesterdayTrades.Where(t
+                => twoDaysAgoAllowed.Contains(t) && t.DailyChange > filter.YesterdayAllowedChange).ToList();
 
             var todayAllowedTrades = todayTrades.Where(t
-                => t.DailyChange > filter.PositiveMinChange && t.DailyChange < filter.PositiveMaxChange).ToList();
-            var yesterdayAllowed = day0202Trades.Where(t
-                => todayAllowedTrades.Contains(t) && t.DailyChange > filter.YesterdayAllowedChange).ToList();
-            var allowed = day0130Trades.Where(t
-                => yesterdayAllowed.Contains(t) && t.DailyChange < filter.YesterdayAllowedChange).ToList();
-            return allowed;
+                => yesterdayAllowed.Contains(t) && t.DailyChange > filter.PositiveMinChange && t.DailyChange < filter.PositiveMaxChange).ToList();
+
+            return todayAllowedTrades;
         }
 
         private static IEnumerable<Trade> GetLastDayTrades(string username, string password, byte market)

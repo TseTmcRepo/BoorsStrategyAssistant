@@ -81,7 +81,7 @@
                         $('#datatablespbe>tbody').empty();
                         $.each(data, function (index, value) {
                             
-                            $('#datatablespbe>tbody').append('<tr><td>' + value.LVal18AFC + '</td><td>' + value.LVal30 + '</td><td>' + Math.floor(value.DailyChange).toLocaleString('fa').split('٬').join(',') + '</td></tr>');
+                            $('#datatablespbe>tbody').append('<tr><td>' + value.LVal18AFC + '</td><td>' + value.LVal30 + '</td><td>' + Math.floor(value.DailyChange).toLocaleString('fa').split('٬').join(',') + '</td><td>' + Math.floor(value.PbE).toLocaleString('fa').split('٬').join(',') + '</td></tr>');
                         });
                     }
                 });
@@ -160,6 +160,7 @@
                                     <th>نماد</th>
                                     <th>نام</th>
                                     <th>درصد تغییر</th>
+                                    <th>P/E</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

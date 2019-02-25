@@ -15,18 +15,21 @@ namespace TsetmcLib
 
             var days = new TseDayCollectionGenerator().GenerateToday();
             var todayTrades = GetLastDayTrades(username, password, filter.Market).ToList();
-            var twodaysagoTrades = GetSpecdayTrades(username, password, days.TwoDaysAgo, filter.Market).ToList();
             var yesterdayTrades = GetSpecdayTrades(username, password, days.Yesterday, filter.Market).ToList();
+            var twodaysagoTrades = GetSpecdayTrades(username, password, days.TwoDaysAgo, filter.Market).ToList();
+            var threedaysagoTrades = GetSpecdayTrades(username, password, days.ThreeDaysAgo, filter.Market).ToList();
 
-            var todayAllowedTrades = todayTrades.Where(t
-                => t.DailyChange < filter.TodayAllowedChange).ToList();
-            var yesterdayAllowed = yesterdayTrades.Where(t
-                => todayAllowedTrades.Contains(t) && t.DailyChange < filter.LastDaysAllowedChange).ToList();
+
+            var threedaysagoAllowed = threedaysagoTrades.Where(t
+                => t.DailyChange < filter.LastDaysAllowedChange).ToList();
             var twodaysagoAllowed = twodaysagoTrades.Where(t
-                => yesterdayAllowed.Contains(t) && t.DailyChange < filter.LastDaysAllowedChange).ToList();
-
+                => threedaysagoAllowed.Contains(t) && t.DailyChange < filter.LastDaysAllowedChange).ToList();
+            var yesterdayAllowed = yesterdayTrades.Where(t
+                => twodaysagoAllowed.Contains(t) && t.DailyChange < filter.LastDaysAllowedChange).ToList();
+            var todayAllowedTrades = todayTrades.Where(t
+                => yesterdayAllowed.Contains(t) && t.DailyChange < filter.TodayAllowedChange).ToList();
             var allowed = allSymbolInfo.Where(t
-                => twodaysagoAllowed.Contains(t) && t.PbE > filter.PbeMinChange && t.PbE < filter.PbeMaxChange).ToList();
+                => todayAllowedTrades.Contains(t) && t.PbE > filter.PbeMinChange && t.PbE < filter.PbeMaxChange).OrderByDescending(o => o.PbE).ThenByDescending(o => o.DailyChange).ToList();
             return allowed;
         }
 
